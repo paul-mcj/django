@@ -1,7 +1,14 @@
 {% extends "main.html" %} {% block content %}
-
 <h1>{{room.name}}</h1>
-
+<p>@{{room.host}}</p>
+<p>{{room.topic}}</p>
+<p>{{room.created}}</p>
 <p>{{room.desc}}</p>
-
-{% endblock content %}
+<h2>body:</h2>
+{% for message in messages %}
+<div class="">
+	<p>{{message.user}}</p>
+	<p>{{message.body}}</p>
+	<p>{{message.updated}}</p>
+</div>
+{% endfor %} {% endblock content %}
