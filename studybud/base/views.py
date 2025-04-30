@@ -1,7 +1,12 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models import Q
-from .models import Room, Topic, Message
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
 from .forms import RoomForm
+from .models import Room, Topic, Message
 
 # Create your views here.
 
@@ -10,6 +15,33 @@ from .forms import RoomForm
 #     {"id": 2, "name": "Learn JavaScript", "desc": "JS is important for web development"},
 #     {"id": 3, "name": "All backend stuff right here!!", "desc": "mysql, mongodb, apis and much more!"},
 # ]
+
+def loginPage(req):
+    if req.method == "POST":
+        username = req.POST.get("username")
+        password = req.POST.get("password")
+
+        try:
+            user = User.objects.get(username = username)
+        except:
+            messages.error(req, "User does not exist")
+            return redirect("login")
+        
+        user = authenticate(req, username=username, password=password)
+
+        if user is not None:
+            login(req, user)
+            return redirect("home")
+        else:
+            messages.error(req, "Username OR password incorrect")
+
+    context = {}
+    return render(req, "base/login_register.html", context)
+
+def logoutUser(req):
+    # django logout method will automatically delete the session token which validates the user
+    logout(req)
+    return redirect("home")
 
 def home(req):
     q = req.GET.get("q") if req.GET.get("q") != None else ""
@@ -29,6 +61,7 @@ def room(req, primary_key):
     context = {"room": room, "messages": messages}
     return render(req, "base/room.html", context)
 
+@login_required(login_url="login")
 def createRoom(req):
     form = RoomForm()
     if(req.method == "POST"):
@@ -40,9 +73,13 @@ def createRoom(req):
     context = {"form": form}
     return render(req, "base/room_form.html", context)
 
+@login_required(login_url="login")
 def updateRoom(req, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
+    if req.user != room.host:
+        return HttpResponse("Authentication required")
 
     if req.method == "POST":
         form = RoomForm(req.POST, instance=room)
@@ -53,8 +90,13 @@ def updateRoom(req, pk):
     context = {"form":form}
     return render(req, "base/room_form.html", context)
 
+@login_required(login_url="login")
 def deleteRoom(req, pk):
     room = Room.objects.get(id=pk)
+
+    if req.user != room.host:
+        return HttpResponse("Authentication required")
+    
     if req.method == "POST":
         room.delete()
         return redirect("home")
