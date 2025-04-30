@@ -1,14 +1,39 @@
 {% extends "main.html" %} {% block content %}
-<h1>{{room.name}}</h1>
-<p>@{{room.host}}</p>
-<p>{{room.topic}}</p>
-<p>{{room.created}}</p>
-<p>{{room.desc}}</p>
-<h2>body:</h2>
-{% for message in messages %}
-<div class="">
-	<p>{{message.user}}</p>
-	<p>{{message.body}}</p>
-	<p>{{message.updated}}</p>
+
+<style>
+	.chat-container {
+		display: grid;
+		align-self: center;
+		justify-content: center;
+	}
+</style>
+
+<div class="chat-container">
+	<h3>{{room.name}}</h3>
+	<p>@{{room.host}}</p>
+	<p>{{room.topic}}</p>
+	<p>{{room.created}}</p>
+	<p>{{room.desc}}</p>
 </div>
-{% endfor %} {% endblock content %}
+
+{% for chat in chats %}
+<div>
+	<small
+		><strong>@{{chat.user}}</strong>
+		<i>{{chat.updated|timesince}} ago</i></small
+	>
+	<p>{{chat.body}}</p>
+</div>
+{% endfor %} {% if request.user.is_authenticated %}
+<div class="comment-form">
+	<form
+		action=""
+		method="POST">
+		{% csrf_token %}
+		<input
+			type="text"
+			name="body"
+			placeholder="Write your message here..." />
+	</form>
+</div>
+{% endif %} {% endblock content %}
