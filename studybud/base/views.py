@@ -1,13 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import RoomForm
 from .models import Room, Topic, Message
-
 # Create your views here.
 
 # rooms = [
@@ -17,8 +17,13 @@ from .models import Room, Topic, Message
 # ]
 
 def loginPage(req):
+    page = "login"
+
+    if req.user.is_authenticated:
+        return redirect("home")
+
     if req.method == "POST":
-        username = req.POST.get("username")
+        username = req.POST.get("username").lower()
         password = req.POST.get("password")
 
         try:
@@ -35,13 +40,30 @@ def loginPage(req):
         else:
             messages.error(req, "Username OR password incorrect")
 
-    context = {}
+    context = {"page": page}
     return render(req, "base/login_register.html", context)
 
 def logoutUser(req):
     # django logout method will automatically delete the session token which validates the user
     logout(req)
     return redirect("home")
+
+def registerPage(req):
+    form = UserCreationForm()
+    context = {"form": form}
+
+    if req.method == "POST":
+        form = UserCreationForm(req.POST)
+        if form.is_valid():
+            user = form.save(commit=False) # don't add to backend just yet, lets quickly update username first to meet our standards
+            user.username = user.username.lower()
+            user.save()
+            login(req, user)
+            return redirect("home")
+        else:
+            messages.error(req, "An error occurred during registration")
+
+    return render(req, "base/login_register.html", context)
 
 def home(req):
     q = req.GET.get("q") if req.GET.get("q") != None else ""
