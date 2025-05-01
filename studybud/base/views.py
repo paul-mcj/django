@@ -79,9 +79,20 @@ def home(req):
 
 def room(req, primary_key):
     room = Room.objects.get(id=primary_key)
-    # chats = Message.objects.filter(room=primary_key)
-    chats = room.message_set.all().order_by("-created")
-    context = {"room": room, "chats": chats}
+    chats = Message.objects.filter(room=primary_key).order_by("-created")
+    # chats = room.message_set.all().order_by("-created")
+    participants = room.participants.all()
+
+    if req.method == "POST":
+        chats = Message.objects.create(
+            user=req.user,
+            room=room,
+            body=req.POST.get("body")
+        )
+        room.participants.add(req.user)
+        return redirect("room", primary_key=room.id)
+
+    context = {"room": room, "chats": chats, "participants": participants}
     return render(req, "base/room.html", context)
 
 @login_required(login_url="login")

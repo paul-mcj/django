@@ -1,39 +1,49 @@
 {% extends "main.html" %} {% block content %}
 
 <style>
-	.chat-container {
+	.room-container {
 		display: grid;
-		align-self: center;
-		justify-content: center;
+		grid-template-columns: 3fr 1fr;
 	}
 </style>
 
-<div class="chat-container">
-	<h3>{{room.name}}</h3>
-	<p>@{{room.host}}</p>
-	<p>{{room.topic}}</p>
-	<p>{{room.created}}</p>
-	<p>{{room.desc}}</p>
-</div>
+<div class="room-container">
+	<div>
+		<div>
+			<h3>{{room.name}}</h3>
+			<p>@{{room.host}}</p>
+			<p>{{room.topic}}</p>
+			<p>{{room.created}}</p>
+			<p>{{room.desc}}</p>
+		</div>
 
-{% for chat in chats %}
-<div>
-	<small
-		><strong>@{{chat.user}}</strong>
-		<i>{{chat.updated|timesince}} ago</i></small
-	>
-	<p>{{chat.body}}</p>
-</div>
-{% endfor %} {% if request.user.is_authenticated %}
-<div class="comment-form">
-	<form
-		action=""
-		method="POST">
-		{% csrf_token %}
-		<input
-			type="text"
-			name="body"
-			placeholder="Write your message here..." />
-	</form>
+		{% for chat in chats %}
+		<div>
+			<small
+				><strong>@{{chat.user}}</strong>
+				<i>{{chat.updated|timesince}} ago</i></small
+			>
+			<p>{{chat.body}}</p>
+		</div>
+		{% endfor %} {% if request.user.is_authenticated %}
+		<div class="comment-form">
+			<form
+				action=""
+				method="POST">
+				{% csrf_token %}
+				<input
+					type="text"
+					name="body"
+					placeholder="Write your message here..." />
+			</form>
+		</div>
+	</div>
+	<div>
+		<h3>Participants</h3>
+		{% for person in participants %}
+		<!-- <a href=""></a> -->
+		<p>@{{person.username}}</p>
+		{% endfor %}
+	</div>
 </div>
 {% endif %} {% endblock content %}
