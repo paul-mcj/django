@@ -5,6 +5,10 @@
 		display: grid;
 		grid-template-columns: 3fr 1fr;
 	}
+
+	.left-border {
+		border-left: 0.25rem black solid;
+	}
 </style>
 
 <div class="room-container">
@@ -16,6 +20,7 @@
 			<p>{{room.created}}</p>
 			<p>{{room.desc}}</p>
 		</div>
+		<hr />
 
 		{% for chat in chats %}
 		<div>
@@ -38,7 +43,7 @@
 			</form>
 		</div>
 	</div>
-	<div>
+	<div class="left-border">
 		<h3>Participants</h3>
 		{% for person in participants %}
 		<!-- <a href=""></a> -->
