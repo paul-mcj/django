@@ -74,7 +74,7 @@ def home(req):
         Q(desc__icontains=q))
     topics = Topic.objects.all()
     room_count = rooms.count()
-    latest = Message.objects.order_by("-created")[:3] # get newest 3 messages
+    latest = Message.objects.order_by("-updated")[:3] # get newest 3 messages
     context = {"rooms": rooms, "topics": topics, "room_count": room_count, "latest": latest}
     return render(req, "base/home.html", context)
 
