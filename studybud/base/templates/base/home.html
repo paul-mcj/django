@@ -52,13 +52,21 @@
 	<div>
 		{% for message in latest %}
 		<div class="latest-card">
-			<h4>
+			<small
+				>@{{message.user}}
+				<i>{{message.created|timesince}}</i></small
+			>
+			<p>
+				replied to
 				<a href="{% url 'room' message.room.id %}"
 					>{{message.room}}</a
 				>
-			</h4>
-			<small>@{{message.user}}</small>
+			</p>
+			{% if message.body|length < 50 %}
 			<p>{{message.body}}</p>
+			{% else %}
+			<p>{{message.body|slice:":50"}}...</p>
+			{% endif %}
 		</div>
 		{% endfor %}
 	</div>
