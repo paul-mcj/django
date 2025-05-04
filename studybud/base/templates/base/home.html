@@ -16,22 +16,9 @@
 <h1>Base home template</h1>
 
 <div class="home-container">
+	<div>{% include "base/topics-component.html" %}</div>
 	<div>
-		<h3>Browse Topics</h3>
-		<hr />
-
-		<div>
-			<a href="{% url 'home' %}">All</a>
-		</div>
-
-		{% for topic in topics %}
-		<div>
-			<a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
-		</div>
-		{% endfor %}
-	</div>
-	<div>
-		<h5>{{room_count}} rooms available</h5>
+		<h3>{{room_count}} rooms available</h3>
 		<a href="{% url 'create-room' %}">Create Room</a>
 		{% for room in rooms %}
 		<div>
@@ -50,25 +37,8 @@
 		{% endfor %}
 	</div>
 	<div>
-		{% for message in latest %}
-		<div class="latest-card">
-			<small
-				>@{{message.user}}
-				<i>{{message.created|timesince}}</i></small
-			>
-			<p>
-				replied to
-				<a href="{% url 'room' message.room.id %}"
-					>{{message.room}}</a
-				>
-			</p>
-			{% if message.body|length < 50 %}
-			<p>{{message.body}}</p>
-			{% else %}
-			<p>{{message.body|slice:":50"}}...</p>
-			{% endif %}
-		</div>
-		{% endfor %}
+		<h3>Recent Activity</h3>
+		{% include "base/activity-component.html" %}
 	</div>
 </div>
 
