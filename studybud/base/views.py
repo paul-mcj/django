@@ -96,6 +96,12 @@ def room(req, primary_key):
     context = {"room": room, "chats": chats, "participants": participants}
     return render(req, "base/room.html", context)
 
+def userProfile(req, pk):
+    user = User.objects.get(id=pk)
+    rooms = Room.objects.filter(host=pk) # all rooms associated with the individual User object
+    context = {"user": user, "rooms": rooms}
+    return render(req, "base/profile.html", context)
+
 @login_required(login_url="login")
 def createRoom(req):
     form = RoomForm()

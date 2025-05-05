@@ -13,28 +13,14 @@
 	}
 </style>
 
-<h1>Base home template</h1>
+<h1>LHL Home</h1>
 
 <div class="home-container">
 	<div>{% include "base/topics-component.html" %}</div>
 	<div>
 		<h3>{{room_count}} rooms available</h3>
 		<a href="{% url 'create-room' %}">Create Room</a>
-		{% for room in rooms %}
-		<div>
-			{% if request.user == room.host %}
-			<a href="{% url 'update-room' room.id %}">Edit</a>
-			<a href="{% url 'delete-room' room.id %}">Delete</a>
-			{% endif %}
-			<span>@{{room.host.username}}</span>
-			<h3>
-				{{room.id}} --
-				<a href="{% url 'room' room.id %}">{{room.name}}</a>
-			</h3>
-			<p>{{room.topic.name}}</p>
-			<hr />
-		</div>
-		{% endfor %}
+		{% include "base/feed-component.html" %}
 	</div>
 	<div>
 		<h3>Recent Activity</h3>
