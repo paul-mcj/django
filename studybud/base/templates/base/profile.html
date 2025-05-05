@@ -1,3 +1,25 @@
 {% extends "main.html" %} {% block content %}
+
+<style>
+	.home-container {
+		display: grid;
+		grid-template-columns: 1fr 3fr 1fr;
+	}
+
+	.latest-card {
+		border: black 0.1rem solid;
+		margin: 1rem;
+		padding: 1rem;
+	}
+</style>
+
 <h1>{{user.username}}</h1>
-{% include "base/feed-component.html" %} {% endblock content %}
+<div class="home-container">
+	<div>{% include "base/topics-component.html" %}</div>
+	<div>{% include "base/feed-component.html" %}</div>
+	<div>
+		<h3>Recent Activity for @{{user.username}}</h3>
+		{% include "base/activity-component.html" %}
+	</div>
+</div>
+{% endblock content %}

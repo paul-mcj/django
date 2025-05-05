@@ -1,4 +1,4 @@
-{% extends "main.html" %} {% block content %}
+{% extends "main.html" %} {% load rounded_timesince %}{% block content %}
 
 <style>
 	.room-container {
@@ -29,7 +29,7 @@
 			{% endif %}
 			<small
 				><strong>@{{chat.user}}</strong>
-				<i>{{chat.updated|timesince}} ago</i></small
+				<i>{{chat.updated|rounded_timesince}}</i></small
 			>
 			<p>{{chat.body}}</p>
 		</div>

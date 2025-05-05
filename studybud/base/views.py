@@ -74,7 +74,9 @@ def home(req):
         Q(desc__icontains=q))
     topics = Topic.objects.all()
     room_count = rooms.count()
-    latest = Message.objects.filter(Q(room__topic__name__icontains=q)).order_by("-updated")[:3] # get newest 3 messages, and filter depending on topic (home page does just newest three regardless of topic)
+    # latest = Message.objects.order_by("-updated")[:3]
+    latest = Message.objects.filter(Q(room__topic__name__icontains=q)).order_by("-updated")[:3] 
+    # get newest 3 messages, and filter depending on topic (home page does just newest three regardless of topic)
     context = {"rooms": rooms, "topics": topics, "room_count": room_count, "latest": latest}
     return render(req, "base/home.html", context)
 
@@ -99,7 +101,9 @@ def room(req, primary_key):
 def userProfile(req, pk):
     user = User.objects.get(id=pk)
     rooms = Room.objects.filter(host=pk) # all rooms associated with the individual User object
-    context = {"user": user, "rooms": rooms}
+    topics = Topic.objects.all()
+    latest = user.message_set.all().order_by("-updated")[:3]
+    context = {"user": user, "rooms": rooms, "topics": topics, "latest": latest}
     return render(req, "base/profile.html", context)
 
 @login_required(login_url="login")
@@ -109,6 +113,7 @@ def createRoom(req):
         form = RoomForm(req.POST)
         if form.is_valid():
             form.save()
+            # FIXME: add new room/desc as a recent activity post??
             return redirect("home")
 
     context = {"form": form}
