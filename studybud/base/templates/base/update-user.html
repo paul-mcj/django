@@ -1,0 +1,23 @@
+{% extends "main.html" %} {% block content %}
+<div>
+	<p>user settings page for {{user.username}}</p>
+	<form
+		method="post"
+		action="">
+		{% csrf_token %} {{form.as_p}}
+
+		<div>
+			<label for="profile-pic">Avatar</label>
+
+			<input
+				type="file"
+				id="profile-pic"
+				name="profile-pic" />
+		</div>
+		<div class="action">
+			<a href="{% url 'home' %}">Cancel</a>
+			<button type="submit">Update</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}

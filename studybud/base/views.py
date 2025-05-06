@@ -112,7 +112,9 @@ def createRoom(req):
     if(req.method == "POST"):
         form = RoomForm(req.POST)
         if form.is_valid():
-            form.save()
+            room = form.save(commit=False)
+            room.host = req.user # logged in user is the automatic host of the new room
+            room.save()
             # FIXME: add new room/desc as a recent activity post??
             return redirect("home")
 
@@ -159,3 +161,8 @@ def deleteMessage(req, pk):
         message.delete()
         return redirect("home")
     return render(req, "base/delete.html", {"obj": message})
+
+@login_required(login_url="login")
+def updateUser(req):
+    context = {}
+    return render(req, 'base/update-user.html', context)

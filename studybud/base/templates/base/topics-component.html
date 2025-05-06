@@ -2,11 +2,13 @@
 <hr />
 
 <div>
-	<a href="{% url 'home' %}">All</a>
+	<a href="{% url 'home' %}">All ({{room_count}})</a>
 </div>
 
 {% for topic in topics %}
 <div>
-	<a href="{% url 'home' %}?q={{topic.name}}">{{topic.name}}</a>
+	<a href="{% url 'home' %}?q={{topic.name}}"
+		>{{topic.name}} ({{topic.room_set.all.count}})</a
+	>
 </div>
 {% endfor %}

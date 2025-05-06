@@ -1,0 +1,22 @@
+body {
+	/* background-color: #fce3e3; */
+	/* background-color: #f0bcbe; */
+	/* background-color: #fcede8; */
+	background-color: #fbf4ed;
+}
+
+.grid-nav {
+	display: grid;
+	justify-self: space-around;
+	align-items: center;
+	grid-template-columns: repeat(4, 1fr); /* corrected syntax */
+	padding: 1rem;
+}
+
+.hidden {
+	display: none;
+}
+
+.show {
+	display: block;
+}
