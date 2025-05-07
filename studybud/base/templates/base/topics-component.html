@@ -1,14 +1,14 @@
 <h3>Browse Topics</h3>
 <hr />
 
-<div>
-	<a href="{% url 'home' %}">All ({{room_count}})</a>
-</div>
-
-{% for topic in topics %}
+{% for topic in limit_topics %}
 <div>
 	<a href="{% url 'home' %}?q={{topic.name}}"
 		>{{topic.name}} ({{topic.room_set.all.count}})</a
 	>
 </div>
 {% endfor %}
+
+<div>
+	<a href="{% url 'see-all-topics' %}">See All</a>
+</div>

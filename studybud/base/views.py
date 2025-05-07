@@ -73,11 +73,12 @@ def home(req):
         Q(name__icontains=q) |
         Q(desc__icontains=q))
     topics = Topic.objects.all()
+    limit_topics = Topic.objects.all()[:3] # limit only 3 topics to home. users can click "see all" to view all available topics on another page
     room_count = rooms.count()
     # latest = Message.objects.order_by("-updated")[:3]
     latest = Message.objects.filter(Q(room__topic__name__icontains=q)).order_by("-updated")[:3] 
     # get newest 3 messages, and filter depending on topic (home page does just newest three regardless of topic)
-    context = {"rooms": rooms, "topics": topics, "room_count": room_count, "latest": latest}
+    context = {"rooms": rooms, "topics": topics, "room_count": room_count, "latest": latest, "limit_topics": limit_topics}
     return render(req, "base/home.html", context)
 
 def room(req, primary_key):
@@ -175,3 +176,13 @@ def updateUser(req):
         
     context = {"form":form}
     return render(req, 'base/update-user.html', context)
+
+def seeAllTopics(req):
+    topics = Topic.objects.all()
+    rooms = Room.objects.all()
+    room_count = rooms.count()
+    latest = Message.objects.order_by("-updated")[:3]
+    # get newest 3 messages for sidebar
+    context = {"rooms": rooms, "topics": topics, "room_count": room_count, "latest": latest}
+
+    return render(req, "base/see-all-topics.html", context)
