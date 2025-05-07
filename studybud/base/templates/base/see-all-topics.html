@@ -1,6 +1,8 @@
 {% extends "main.html" %} {% block content %}
 <h3>All Topics: {{room_count}} rooms available</h3>
 
+<a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+
 <div class="topics-page-container">
 	<div>
 		<ul>
@@ -17,8 +19,6 @@
 	<div>
 		<h3>Recent Activity</h3>
 		{% include "base/activity-component.html" %}
-
-		<!-- context = {"rooms": rooms, "topics": topics, "room_count": room_count} -->
 	</div>
 </div>
 {% endblock content %}
