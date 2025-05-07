@@ -58,10 +58,15 @@
 	</div>
 	<div class="left-border">
 		<h3>Participants</h3>
-		{% for person in participants %}
-		<!-- <a href=""></a> -->
-		<p>@{{person.username}}</p>
-		{% endfor %}
+		<ul>
+			{% for person in participants %}
+			<li>
+				<a href="{% url 'user-profile' person.id %}">
+					@{{person.username}}
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 </div>
 {% endif %} {% endblock content %}

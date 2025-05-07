@@ -4,16 +4,16 @@
 	<form
 		method="post"
 		action="">
-		{% csrf_token %} {{form.as_p}}
-
+		{% csrf_token %} {% for field in form %}
 		<div>
-			<label for="profile-pic">Avatar</label>
-
-			<input
+			<label for="{{field.label}}">{{field.label}}</label>
+			{{field}}
+			<!-- <input
 				type="file"
 				id="profile-pic"
-				name="profile-pic" />
+				name="profile-pic" /> -->
 		</div>
+		{% endfor %}
 		<div class="action">
 			<a href="{% url 'home' %}">Cancel</a>
 			<button type="submit">Update</button>
