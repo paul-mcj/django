@@ -1,7 +1,8 @@
+from base.models import Room, Message, Topic
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view 
 from rest_framework.response import Response 
-from base.models import Room, Message, Topic
-from .serializers import RoomSerializer, MessageSerializer, TopicSerializer
+from .serializers import RoomSerializer, MessageSerializer, TopicSerializer, UserSerializer
 
 @api_view(["GET"])
 def getRoutes(req):
@@ -37,3 +38,21 @@ def getTopics(req):
     serializer = TopicSerializer(topics, many=True)
 
     return Response(serializer.data)
+
+@api_view(["GET"])
+def getUsers(req):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def getSingleUser(req, id):
+    user = User.objects.get(id=id)
+    serializer = UserSerializer(user)
+
+    return Response(serializer.data)
+
+@api_view(["PUT"])
+def updateSingleUser(req, id):
+    
