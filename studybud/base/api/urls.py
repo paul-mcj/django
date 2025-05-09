@@ -9,5 +9,5 @@ urlpatterns = [
     path("rooms/<int:id>/messages", views.getRoomMessages),
     path("users/", views.getUsers),
     path("users/<int:id>", views.getSingleUser),
-    path("users/<int:id>", views.updateSingleUser),
+    # path("users/<int:id>", views.updateSingleUser),
 ]

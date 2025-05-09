@@ -53,6 +53,5 @@ def getSingleUser(req, id):
 
     return Response(serializer.data)
 
-@api_view(["PUT"])
-def updateSingleUser(req, id):
-    
+# @api_view(["PUT"])
+# def updateSingleUser(req, id):
