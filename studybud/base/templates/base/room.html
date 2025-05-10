@@ -11,6 +11,9 @@
 					></small
 				>
 			</p>
+			<img
+				alt="@{{room.host.username}}'s' profile picture"
+				src="{{room.host.avatar.url}}" />
 			<p>{{room.topic}}</p>
 			<p>{{room.created}}</p>
 			<p>{{room.desc}}</p>
@@ -29,7 +32,9 @@
 				>
 				<i>{{chat.updated|rounded_timesince}}</i>
 			</p>
-
+			<img
+				alt="@{{chat.user.username}}'s' profile picture"
+				src="{{chat.user.avatar.url}}" />
 			<p>{{chat.body}}</p>
 		</div>
 		{% endfor %} {% if request.user.is_authenticated %}

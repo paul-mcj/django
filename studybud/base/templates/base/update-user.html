@@ -3,17 +3,17 @@
 	<p>user settings page for {{user.username}}</p>
 	<form
 		method="post"
-		action="">
+		action=""
+		enctype="multipart/form-data">
 		{% csrf_token %} {% for field in form %}
 		<div>
 			<label for="{{field.label}}">{{field.label}}</label>
 			{{field}}
-			<!-- <input
-				type="file"
-				id="profile-pic"
-				name="profile-pic" /> -->
 		</div>
 		{% endfor %}
+		<img
+			alt="@{{user.username}}'s' profile picture"
+			src="{{user.avatar.url}}" />
 		<div class="action">
 			<a href="{% url 'home' %}">Cancel</a>
 			<button type="submit">Update</button>

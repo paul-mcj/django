@@ -1,20 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import RoomForm, UserForm
-from .models import Room, Topic, Message
-# Create your views here.
+from .forms import RoomForm, UserForm, MyUserCreationForm
+from .models import Room, Topic, Message, User
 
-# rooms = [
-#     {"id": 1, "name": "Python Tutorials", "desc": "lets learn the basics of this cool language"},
-#     {"id": 2, "name": "Learn JavaScript", "desc": "JS is important for web development"},
-#     {"id": 3, "name": "All backend stuff right here!!", "desc": "mysql, mongodb, apis and much more!"},
-# ]
+# Create your views here.
 
 def loginPage(req):
     page = "login"
@@ -49,19 +42,26 @@ def logoutUser(req):
     return redirect("home")
 
 def registerPage(req):
-    form = UserCreationForm()
+    form = MyUserCreationForm()
     context = {"form": form}
 
     if req.method == "POST":
-        form = UserCreationForm(req.POST)
-        if form.is_valid():
+        username = req.POST.get("username").lower()
+        
+        if User.objects.filter(username=username) == None:
+            return messages.error(req, "Username already taken, please provide a new one:")
+        
+        else: 
+          form = MyUserCreationForm(req.POST)
+          if form.is_valid():
             user = form.save(commit=False) # don't add to backend just yet, lets quickly update username first to meet our standards
             user.username = user.username.lower()
             user.save()
             login(req, user)
             return redirect("home")
-        else:
-            messages.error(req, "An error occurred during registration")
+          
+          else:
+              messages.error(req, "An error occurred during registration")
 
     return render(req, "base/login_register.html", context)
 
@@ -169,7 +169,7 @@ def updateUser(req):
     form = UserForm(instance=user)
 
     if user.id and (req.method == "POST"):
-        form = UserForm(req.POST, instance=user)
+        form = UserForm(req.POST, req.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect("user-profile", pk=user.id)

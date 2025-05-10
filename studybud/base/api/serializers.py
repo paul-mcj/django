@@ -1,5 +1,4 @@
-from base.models import Room, Message, Topic
-from django.contrib.auth.models import User
+from base.models import Room, Message, Topic, User
 from rest_framework.serializers import ModelSerializer
 
 class RoomSerializer(ModelSerializer):

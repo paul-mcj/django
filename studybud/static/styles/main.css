@@ -5,6 +5,12 @@ body {
 	background-color: #fbf4ed;
 }
 
+img {
+	width: 4rem;
+	height: 4rem;
+	border-radius: 2rem;
+}
+
 .grid-nav {
 	display: grid;
 	justify-self: space-around;
